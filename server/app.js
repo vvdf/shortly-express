@@ -91,11 +91,11 @@ app.get('/signup',
 app.post('/signup', (req, res) => {
   const { username, password } = req.body;
   models.Users.create({ username, password })
-    .then(() => res.redirect('/login'))
+    .then(() => res.redirect('/'))
     .catch(err => {
       console.log(err.sqlMessage);
       if (err.sqlMessage.indexOf("Duplicate") > -1) {
-        res.status(501).send("Username already in use, please pick another");
+        res.redirect('/signup');
       } else {
         res.status(500).send();
       }
