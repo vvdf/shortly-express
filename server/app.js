@@ -81,20 +81,38 @@ app.post('/links',
 app.post('/signup', (req, res) => {
   const { username, password } = req.body;
   models.Users.create({ username, password })
-    .then(() => res.send(201, 'Successful Sign Up'))
+    .then(() => res.status(201).send('Successful Sign Up'))
     .catch(err => {
       console.log(err.sqlMessage);
       if (err.sqlMessage.indexOf("Duplicate") > -1) {
-        res.send(501, "Username already in use, please pick another");
+        res.status(501).send("Username already in use, please pick another");
       } else {
-        res.send(500);
+        res.status(500).send();
       }
     });
 });
 
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  res.send();
+  models.Users.get({ username })
+    .then(userData => {
+      return models.Users.compare(password, userData.password, userData.salt);
+    })
+    .then(loginSuccess => {
+      if (loginSuccess) {
+        console.log("Successful login");
+        res.status(200).send("Successful Login Beep Boop");
+      } else {
+        throw "Invalid Username and Password combination";
+      }
+    })
+    .catch(err => {
+      if (err === 'Invalid Username and Password combination') {
+        res.status(500).send(err);
+      } else {
+        res.status(500).send();
+      }
+    });
 });
 
 /************************************************************/
