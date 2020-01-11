@@ -32,6 +32,7 @@ class Sessions extends Model {
    * or rejected with the error that occured. Note that even if multiple session records
    * match the options, the promise will only be fulfilled with one.
    */
+
   get(options) {
     return super.get.call(this, options)
       .then(session => {

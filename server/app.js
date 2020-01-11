@@ -5,8 +5,10 @@ const partials = require('express-partials');
 const bodyParser = require('body-parser');
 const Auth = require('./middleware/auth');
 const models = require('./models');
+const cookieParser = require('./middleware/cookieParser');
 
 const app = express();
+app.use(cookieParser);
 
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'ejs');
@@ -106,6 +108,9 @@ app.post('/login', (req, res) => {
   const { username, password } = req.body;
   models.Users.get({ username })
     .then(userData => {
+      // register/create a session
+        // get user ID of _username_
+        // generate a hash
       return models.Users.compare(password, userData.password, userData.salt);
     })
     .then(loginSuccess => {
