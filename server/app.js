@@ -9,6 +9,8 @@ const cookieParser = require('./middleware/cookieParser');
 
 const app = express();
 app.use(cookieParser);
+app.use(Auth.createSession);
+app.use(Auth.setCookie);
 
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'ejs');
@@ -96,7 +98,7 @@ app.post('/signup', (req, res) => {
     .then(() => res.redirect('/'))
     .catch(err => {
       console.log(err.sqlMessage);
-      if (err.sqlMessage.indexOf("Duplicate") > -1) {
+      if (err.sqlMessage.indexOf('Duplicate') > -1) {
         res.redirect('/signup');
       } else {
         res.status(500).send();
@@ -109,16 +111,16 @@ app.post('/login', (req, res) => {
   models.Users.get({ username })
     .then(userData => {
       // register/create a session
-        // get user ID of _username_
-        // generate a hash
+      // get user ID of _username_
+      // generate a hash
       return models.Users.compare(password, userData.password, userData.salt);
     })
     .then(loginSuccess => {
       if (loginSuccess) {
-        console.log("Successful login");
-        res.status(200).send("Successful Login Beep Boop");
+        console.log('Successful login');
+        res.status(200).send('Successful Login Beep Boop');
       } else {
-        throw "Invalid Username and Password combination";
+        throw 'Invalid Username and Password combination';
       }
     })
     .catch(err => {
