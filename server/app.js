@@ -78,10 +78,20 @@ app.post('/links',
 // Write your authentication routes here
 /************************************************************/
 
+app.get('/login',
+  (req, res) => {
+    res.render('login');
+  });
+
+app.get('/signup',
+  (req, res) => {
+    res.render('signup');
+  });
+
 app.post('/signup', (req, res) => {
   const { username, password } = req.body;
   models.Users.create({ username, password })
-    .then(() => res.status(201).send('Successful Sign Up'))
+    .then(() => res.redirect('/login'))
     .catch(err => {
       console.log(err.sqlMessage);
       if (err.sqlMessage.indexOf("Duplicate") > -1) {
