@@ -40,6 +40,8 @@ module.exports.createSession = (req, res, next) => {
             const { hash, userId } = session;
             req.session = { hash, userId };
             // Set-Cookie with session hash
+            res.cookies = { shortlyid: { value: hash } };
+            res.cookie('shortlyid', hash);
             next();
           });
         }
@@ -50,14 +52,11 @@ module.exports.createSession = (req, res, next) => {
     createAnonymousSession().then(session => {
       const { hash, userId } = session;
       req.session = { hash, userId };
+      res.cookies = { shortlyid: { value: hash } };
+      res.cookie('shortlyid', hash);
       next();
     });
   }
-};
-
-module.exports.setCookie = (req, res, next) => {
-  res.cookie('shortlyid', req.session.hash);
-  next();
 };
 
 /************************************************************/

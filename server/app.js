@@ -10,7 +10,6 @@ const cookieParser = require('./middleware/cookieParser');
 const app = express();
 app.use(cookieParser);
 app.use(Auth.createSession);
-app.use(Auth.setCookie);
 
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'ejs');
