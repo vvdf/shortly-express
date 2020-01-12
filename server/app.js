@@ -22,23 +22,39 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 app.get('/',
   (req, res) => {
-    res.render('index');
+    const isLoggedIn = !!req.session.userId;
+    if (isLoggedIn) {
+      res.render('index');
+    } else {
+      res.redirect('/login');
+    }
   });
 
 app.get('/create',
   (req, res) => {
-    res.render('index');
+    const isLoggedIn = !!req.session.userId;
+    if (isLoggedIn) {
+      res.render('index');
+    } else {
+      res.redirect('/login');
+    }
   });
 
 app.get('/links',
   (req, res, next) => {
-    models.Links.getAll()
-      .then(links => {
-        res.status(200).send(links);
-      })
-      .error(error => {
-        res.status(500).send(error);
-      });
+
+    const isLoggedIn = !!req.session.userId;
+    if (isLoggedIn) {
+      models.Links.getAll()
+        .then(links => {
+          res.status(200).send(links);
+        })
+        .error(error => {
+          res.status(500).send(error);
+        });
+    } else {
+      res.redirect('/login');
+    }
   });
 
 app.post('/links',
