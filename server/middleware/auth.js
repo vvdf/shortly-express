@@ -26,11 +26,10 @@ module.exports.createSession = (req, res, next) => {
           // Cookie hash matches an existing sessions hash
           // Decorate request with the session data
           console.log('Cookie hash is valid and has user, you are logged in');
-
           req.session = {
             hash: shortlyid,
             userId: session.userId,
-            username: session.user.username
+            user: session.user
           };
           next();
         } else {
