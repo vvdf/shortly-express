@@ -18,8 +18,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
-
-
 app.get('/',
   (req, res) => {
     const isLoggedIn = !!req.session.userId;
@@ -157,7 +155,6 @@ app.get('/:code', (req, res, next) => {
 
   return models.Links.get({ code: req.params.code })
     .tap(link => {
-
       if (!link) {
         throw new Error('Link does not exist');
       }
